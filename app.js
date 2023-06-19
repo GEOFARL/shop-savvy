@@ -8,7 +8,14 @@ const shopRoutes = require('./routes/shop');
 
 const app = express();
 
-app.engine('hbs', expressHbs());
+app.engine(
+  'hbs',
+  expressHbs({
+    defaultLayout: 'main-layout',
+    layoutsDir: 'views/layouts/',
+    extname: 'hbs',
+  })
+);
 app.set('view engine', 'hbs');
 app.set('views', 'views');
 
@@ -19,7 +26,7 @@ app.use('/admin', adminRoutes.routes);
 app.use(shopRoutes);
 
 app.use('/', (req, res, next) => {
-  res.status(404).render('404', { docTitle: 'Page not Found', layout: false });
+  res.status(404).render('404', { docTitle: 'Page not Found' });
 });
 
 app.listen(3000);

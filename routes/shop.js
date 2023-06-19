@@ -14,7 +14,8 @@ shopRouter.get('/', (req, res, next) => {
     docTitle: 'Shop',
     path: '/',
     hasProducts: products.length > 0,
-    layout: false,
+    activeShop: true,
+    productCSS: true,
   });
 });
 
