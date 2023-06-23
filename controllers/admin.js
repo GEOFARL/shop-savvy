@@ -4,9 +4,6 @@ exports.getAddProduct = (req, res, next) => {
   res.render('admin/add-product', {
     docTitle: 'Add Product',
     path: '/admin/add-product',
-    productCSS: true,
-    formsCSS: true,
-    activeAddProduct: true,
   });
 };
 
@@ -18,13 +15,10 @@ exports.postAddProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll((products) => {
-    res.render('shop/product-list', {
+    res.render('admin/products', {
       products,
       docTitle: 'Shop',
-      path: '/',
-      hasProducts: products.length > 0,
-      activeShop: true,
-      productCSS: true,
+      path: '/admin/products',
     });
   });
 };
