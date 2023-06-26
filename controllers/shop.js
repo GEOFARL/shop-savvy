@@ -9,10 +9,19 @@ exports.getProducts = (req, res, next) => {
   //     path: '/products',
   //   });
   // });
-  Product.fetchAll()
-    .then(([rows, fieldData]) => {
+  // Product.fetchAll()
+  //   .then(([rows, fieldData]) => {
+  //     res.render('shop/product-list', {
+  //       products: rows,
+  //       docTitle: 'Shop',
+  //       path: '/products',
+  //     });
+  //   })
+  //   .catch((e) => console.log(e));
+  Product.findAll()
+    .then((products) => {
       res.render('shop/product-list', {
-        products: rows,
+        products: products,
         docTitle: 'Shop',
         path: '/products',
       });
@@ -48,10 +57,20 @@ exports.getIndex = (req, res, next) => {
   //     path: '/',
   //   });
   // });
-  Product.fetchAll()
-    .then(([rows, fieldData]) => {
+  // Product.fetchAll()
+  //   .then(([rows, fieldData]) => {
+  //     res.render('shop/index', {
+  //       products: rows,
+  //       docTitle: 'All Products',
+  //       path: '/',
+  //     });
+  //   })
+  //   .catch((e) => console.log(e));
+
+  Product.findAll()
+    .then((products) => {
       res.render('shop/index', {
-        products: rows,
+        products: products,
         docTitle: 'All Products',
         path: '/',
       });
