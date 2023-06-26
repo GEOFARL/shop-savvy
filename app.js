@@ -2,7 +2,8 @@ const path = require('path');
 require('dotenv').config();
 
 const express = require('express');
-const db = require('./util/database');
+// const db = require('./util/database');
+const sequelize = require('./util/database');
 
 // const expressHbs = require('express-handlebars').engine;
 
@@ -31,4 +32,11 @@ app.use(shopRoutes);
 
 app.use('/', get404);
 
-app.listen(3000);
+sequelize
+  .sync()
+  .then((result) => {
+    app.listen(3000);
+  })
+  .catch((e) => console.log(e));
+
+// app.listen(3000);
