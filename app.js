@@ -4,13 +4,6 @@ require('dotenv').config();
 const express = require('express');
 const db = require('./util/database');
 
-db.execute('SELECT * FROM products')
-  .then((result) => {
-    console.log(result[0], result[1]);
-  })
-  .catch((e) => {
-    console.log(e);
-  });
 // const expressHbs = require('express-handlebars').engine;
 
 const adminRoutes = require('./routes/admin');
