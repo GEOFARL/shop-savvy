@@ -38,11 +38,20 @@ exports.getProduct = (req, res, next) => {
   //     path: '/products',
   //   });
   // });
-  Product.findById(prodId)
-    .then(([data]) => {
+  // Product.findById(prodId)
+  //   .then(([data]) => {
+  //     res.render('shop/product-detail', {
+  //       product: data[0],
+  //       docTitle: data[0].title,
+  //       path: '/products',
+  //     });
+  //   })
+  //   .catch((e) => console.log(e));
+  Product.findByPk(prodId)
+    .then((product) => {
       res.render('shop/product-detail', {
-        product: data[0],
-        docTitle: data[0].title,
+        product: product,
+        docTitle: product.title,
         path: '/products',
       });
     })
