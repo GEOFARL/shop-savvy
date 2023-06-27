@@ -66,6 +66,12 @@ sequelize
   })
   .then((user) => {
     return user.createCart();
+    // return User.findOrCreate({
+    //   where: {
+    //     id: 1,
+    //   },
+    //   include: [Cart],
+    // });
   })
   .then(() => {
     app.listen(3000);
