@@ -37,7 +37,19 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect('/');
   }
   const prodId = req.params.productId;
-  Product.findById(prodId, (product) => {
+  // Product.findById(prodId, (product) => {
+  //   if (!product) {
+  //     return res.redirect('/');
+  //   }
+  //   res.render('admin/edit-product', {
+  //     docTitle: 'Edit Product',
+  //     path: '/admin/edit-product',
+  //     editing: editMode,
+  //     product,
+  //   });
+  // });
+
+  Product.findByPk(prodId).then((product) => {
     if (!product) {
       return res.redirect('/');
     }
@@ -45,32 +57,56 @@ exports.getEditProduct = (req, res, next) => {
       docTitle: 'Edit Product',
       path: '/admin/edit-product',
       editing: editMode,
-      product,
+      product: product,
     });
   });
 };
 
 exports.postEditProduct = (req, res, next) => {
   const { title, price, imageUrl, description, productId } = req.body;
-  const updatedProduct = new Product(
-    title,
-    imageUrl,
-    price,
-    description,
-    productId
-  );
-  updatedProduct.save();
-  res.redirect('/admin/products');
+  // const updatedProduct = new Product(
+  //   title,
+  //   imageUrl,
+  //   price,
+  //   description,
+  //   productId
+  // );
+  // updatedProduct.save();
+
+  Product.findByPk(productId)
+    .then((product) => {
+      product.title = title;
+      product.price = price;
+      product.description = description;
+      product.imageUrl = imageUrl;
+      return product.save();
+    })
+    .then((result) => {
+      console.log('UPDATED PRODUCT');
+      res.redirect('/admin/products');
+    })
+    .catch((e) => console.log(e));
+  // res.redirect('/admin/products');
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll((products) => {
-    res.render('admin/products', {
-      products,
-      docTitle: 'Shop',
-      path: '/admin/products',
-    });
-  });
+  // Product.fetchAll((products) => {
+  //   res.render('admin/products', {
+  //     products,
+  //     docTitle: 'Shop',
+  //     path: '/admin/products',
+  //   });
+  // });
+
+  Product.findAll()
+    .then((products) => {
+      res.render('admin/products', {
+        products: products,
+        docTitle: 'Shop',
+        path: '/admin/products',
+      });
+    })
+    .catch((e) => console.log(e));
 };
 
 exports.postDeleteProduct = (req, res, next) => {

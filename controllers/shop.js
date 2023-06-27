@@ -56,6 +56,21 @@ exports.getProduct = (req, res, next) => {
       });
     })
     .catch((e) => console.log(e));
+
+  // ALTERNATIVE WAY
+  // Product.findAll({
+  //   where: {
+  //     id: prodId,
+  //   },
+  // })
+  //   .then(([product]) => {
+  //     res.render('shop/product-detail', {
+  //       product: product,
+  //       docTitle: product.title,
+  //       path: '/products',
+  //     });
+  //   })
+  //   .catch((e) => console.log(e));
 };
 
 exports.getIndex = (req, res, next) => {
