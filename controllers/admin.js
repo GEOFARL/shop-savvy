@@ -51,17 +51,34 @@ exports.getEditProduct = (req, res, next) => {
   //   });
   // });
 
-  Product.findByPk(prodId).then((product) => {
-    if (!product) {
-      return res.redirect('/');
-    }
-    res.render('admin/edit-product', {
-      docTitle: 'Edit Product',
-      path: '/admin/edit-product',
-      editing: editMode,
-      product: product,
-    });
-  });
+  // Product.findByPk(prodId)
+  //   .then((product) => {
+  //     if (!product) {
+  //       return res.redirect('/');
+  //     }
+  //     res.render('admin/edit-product', {
+  //       docTitle: 'Edit Product',
+  //       path: '/admin/edit-product',
+  //       editing: editMode,
+  //       product: product,
+  //     });
+  //   })
+  //   .catch((e) => console.log(e));
+
+  req.user
+    .getProducts({ where: { id: prodId } })
+    .then(([product]) => {
+      if (!product) {
+        return res.redirect('/');
+      }
+      res.render('admin/edit-product', {
+        docTitle: 'Edit Product',
+        path: '/admin/edit-product',
+        editing: editMode,
+        product: product,
+      });
+    })
+    .catch((e) => console.log(e));
 };
 
 exports.postEditProduct = (req, res, next) => {
@@ -100,7 +117,8 @@ exports.getProducts = (req, res, next) => {
   //   });
   // });
 
-  Product.findAll()
+  req.user
+    .getProducts()
     .then((products) => {
       res.render('admin/products', {
         products: products,
