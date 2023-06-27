@@ -18,6 +18,7 @@ exports.postAddProduct = (req, res, next) => {
   })
     .then((result) => {
       // console.log(result);
+      res.redirect('/');
     })
     .catch((e) => console.log(e));
   // const product = new Product(title, imageUrl, price, description);
@@ -111,6 +112,14 @@ exports.getProducts = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.deleteById(prodId);
-  res.redirect('/admin/products');
+  // Product.deleteById(prodId);
+  Product.findByPk(prodId)
+    .then((product) => {
+      return product.destroy();
+    })
+    .then((result) => {
+      res.redirect('/admin/products');
+    })
+    .catch((e) => console.log(e));
+  // res.redirect('/admin/products');
 };
