@@ -9,6 +9,9 @@ const OrderItem = sequelize.define('orderItem', {
     allowNull: false,
     primaryKey: true,
   },
+  quantity: {
+    type: Sequelize.INTEGER,
+  },
 });
 
 module.exports = OrderItem;
