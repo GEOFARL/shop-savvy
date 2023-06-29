@@ -9,16 +9,31 @@
 
 // module.exports = pool.promise();
 
-const Sequelize = require('sequelize').Sequelize;
+// const Sequelize = require('sequelize').Sequelize;
 
-const sequelize = new Sequelize(
-  'node-complete',
-  'root',
-  process.env.DB_PASSWORD,
-  {
-    dialect: 'mysql',
-    host: 'localhost',
-  }
-);
+// const sequelize = new Sequelize(
+//   'node-complete',
+//   'root',
+//   process.env.DB_PASSWORD,
+//   {
+//     dialect: 'mysql',
+//     host: 'localhost',
+//   }
+// );
 
-module.exports = sequelize;
+// module.exports = sequelize;
+
+const { MongoClient } = require('mongodb');
+
+const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.dd2jder.mongodb.net/?retryWrites=true&w=majority`;
+
+const mongoConnect = (cb) => {
+  MongoClient.connect(uri)
+    .then((client) => {
+      console.log('connected');
+      cb(client);
+    })
+    .catch((e) => console.log(e));
+};
+
+module.exports = mongoConnect;
