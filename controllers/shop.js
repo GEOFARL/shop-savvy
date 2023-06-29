@@ -56,15 +56,15 @@ exports.getProduct = (req, res, next) => {
   //     });
   //   })
   //   .catch((e) => console.log(e));
-  Product.findByPk(prodId)
-    .then((product) => {
-      res.render('shop/product-detail', {
-        product: product,
-        docTitle: product.title,
-        path: '/products',
-      });
-    })
-    .catch((e) => console.log(e));
+  // Product.findByPk(prodId)
+  //   .then((product) => {
+  //     res.render('shop/product-detail', {
+  //       product: product,
+  //       docTitle: product.title,
+  //       path: '/products',
+  //     });
+  //   })
+  //   .catch((e) => console.log(e));
 
   // ALTERNATIVE WAY
   // Product.findAll({
@@ -80,6 +80,16 @@ exports.getProduct = (req, res, next) => {
   //     });
   //   })
   //   .catch((e) => console.log(e));
+
+  Product.findById(prodId)
+    .then((product) => {
+      res.render('shop/product-detail', {
+        product: product,
+        docTitle: product.title,
+        path: '/products',
+      });
+    })
+    .catch((e) => console.log(e));
 };
 
 exports.getIndex = (req, res, next) => {
