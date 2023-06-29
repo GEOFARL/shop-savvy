@@ -135,6 +135,32 @@ class Product {
         console.log(e);
       });
   }
+
+  static fetchAll() {
+    const db = getDb();
+    return db
+      .collection('products')
+      .find()
+      .toArray()
+      .then((products) => {
+        console.log(products);
+        return products;
+      })
+      .catch((e) => console.log(e));
+  }
+
+  static findById(prodId) {
+    const db = getDb();
+    return db
+      .collection('products')
+      .find({ _id: prodId })
+      .next()
+      .then((product) => {
+        console.log(product);
+        return product;
+      })
+      .catch((e) => console.log(e));
+  }
 }
 
 module.exports = Product;

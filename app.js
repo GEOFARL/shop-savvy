@@ -16,7 +16,7 @@ const express = require('express');
 const { mongoConnect } = require('./util/database');
 
 const adminRoutes = require('./routes/admin');
-// const shopRoutes = require('./routes/shop');
+const shopRoutes = require('./routes/shop');
 // const { get404 } = require('./controllers/error');
 
 const app = express();
@@ -45,7 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // });
 
 app.use('/admin', adminRoutes);
-// app.use(shopRoutes);
+app.use(shopRoutes);
 
 // app.use('/', get404);
 
