@@ -25,15 +25,29 @@
 
 const { MongoClient } = require('mongodb');
 
-const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.dd2jder.mongodb.net/?retryWrites=true&w=majority`;
+let _db;
+
+const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.dd2jder.mongodb.net/?retryWrites=true&dbName=shop&w=majority`;
 
 const mongoConnect = (cb) => {
   MongoClient.connect(uri)
     .then((client) => {
       console.log('connected');
+      _db = client.db();
       cb(client);
     })
-    .catch((e) => console.log(e));
+    .catch((e) => {
+      console.log(e);
+      throw e;
+    });
 };
 
-module.exports = mongoConnect;
+const getDb = () => {
+  if (_db) {
+    return _db;
+  }
+  throw 'No database found';
+};
+
+exports.mongoConnect = mongoConnect;
+exports.getDb = getDb;

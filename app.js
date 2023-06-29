@@ -13,11 +13,11 @@ const express = require('express');
 
 // const expressHbs = require('express-handlebars').engine;
 
-const mongoConnect = require('./util/database');
+const { mongoConnect } = require('./util/database');
 
 const adminRoutes = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
-const { get404 } = require('./controllers/error');
+// const shopRoutes = require('./routes/shop');
+// const { get404 } = require('./controllers/error');
 
 const app = express();
 
@@ -45,9 +45,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // });
 
 app.use('/admin', adminRoutes);
-app.use(shopRoutes);
+// app.use(shopRoutes);
 
-app.use('/', get404);
+// app.use('/', get404);
 
 // Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 // User.hasMany(Product);
@@ -85,8 +85,7 @@ app.use('/', get404);
 //   })
 //   .catch((e) => console.log(e));
 
-mongoConnect((client) => {
-  console.log(client);
+mongoConnect(() => {
   app.listen(3000);
 });
 
