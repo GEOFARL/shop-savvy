@@ -122,7 +122,7 @@ class Product {
     this.price = price;
     this.description = description;
     this.imageUrl = imageUrl;
-    this._id = new ObjectId(id);
+    this._id = id && new ObjectId(id);
   }
 
   save() {
@@ -136,13 +136,9 @@ class Product {
     } else {
       dbOp = db.collection('products').insertOne({ ...this });
     }
-    return dbOp
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    return dbOp.catch((e) => {
+      console.log(e);
+    });
   }
 
   static fetchAll() {
@@ -152,7 +148,6 @@ class Product {
       .find()
       .toArray()
       .then((products) => {
-        console.log(products);
         return products;
       })
       .catch((e) => console.log(e));
@@ -165,7 +160,6 @@ class Product {
       .find({ _id: new ObjectId(prodId) })
       .next()
       .then((product) => {
-        console.log(product);
         return product;
       })
       .catch((e) => console.log(e));
@@ -177,7 +171,6 @@ class Product {
     return db
       .collection('products')
       .deleteOne({ _id: new ObjectId(prodId) })
-      .then((res) => console.log(res))
       .catch((e) => console.log(e));
   }
 }
