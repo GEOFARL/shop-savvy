@@ -179,16 +179,21 @@ exports.getProducts = (req, res, next) => {
     .catch((e) => console.log(e));
 };
 
-// exports.postDeleteProduct = (req, res, next) => {
-//   const prodId = req.body.productId;
-//   // Product.deleteById(prodId);
-//   Product.findByPk(prodId)
-//     .then((product) => {
-//       return product.destroy();
-//     })
-//     .then((result) => {
-//       res.redirect('/admin/products');
-//     })
-//     .catch((e) => console.log(e));
-//   // res.redirect('/admin/products');
-// };
+exports.postDeleteProduct = (req, res, next) => {
+  const prodId = req.body.productId;
+  // Product.deleteById(prodId);
+  // Product.findByPk(prodId)
+  //   .then((product) => {
+  //     return product.destroy();
+  //   })
+  //   .then((result) => {
+  //     res.redirect('/admin/products');
+  //   })
+  //   .catch((e) => console.log(e));
+  Product.deleteById(prodId)
+    .then(() => {
+      res.redirect('/admin/products');
+    })
+    .catch((e) => console.log(e));
+  // res.redirect('/admin/products');
+};
