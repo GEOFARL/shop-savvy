@@ -132,11 +132,21 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
+  // req.user
+  //   .getCart()
+  //   .then((cart) => {
+  //     return cart.getProducts();
+  //   })
+  //   .then((products) => {
+  //     res.render('shop/cart', {
+  //       path: '/cart',
+  //       docTitle: 'Your Cart',
+  //       products: products,
+  //     });
+  //   })
+  //   .catch((e) => console.log(e));
   req.user
     .getCart()
-    .then((cart) => {
-      return cart.getProducts();
-    })
     .then((products) => {
       res.render('shop/cart', {
         path: '/cart',
@@ -172,7 +182,7 @@ exports.postCart = (req, res, next) => {
     .then((product) => {
       return req.user.addToCart(product);
     })
-    .then((result) => console.log(result));
+    .then(() => res.redirect('/cart'));
 
   // Product.findById(prodId, (product) => {
   //   Cart.addProduct(prodId, product.price);
