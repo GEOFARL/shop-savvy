@@ -39,7 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
   User.findById('64a3e82ccad39584d0d7d2bb')
     .then((user) => {
-      req.user = user;
+      req.user = new User(user.name, user.email, user.cart, user._id);
       next();
     })
     .catch((e) => console.log(e));
@@ -88,7 +88,7 @@ app.use('/', get404);
 
 mongoConnect(() => {
   app.listen(3000);
-  const max = new User('geofarl', 'toper.one11@gmail.com');
+  const max = new User('geofarl', 'toper.one11@gmail.com', { items: [] });
   max
     .save()
     // .then((document) => {

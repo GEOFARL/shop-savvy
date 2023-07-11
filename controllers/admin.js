@@ -111,6 +111,7 @@ exports.getEditProduct = (req, res, next) => {
 
 exports.postEditProduct = (req, res, next) => {
   const { title, price, imageUrl, description, productId } = req.body;
+  const { user } = req;
   // const updatedProduct = new Product(
   //   title,
   //   imageUrl,
@@ -139,6 +140,7 @@ exports.postEditProduct = (req, res, next) => {
     price,
     description,
     imageUrl,
+    user._id,
     new ObjectId(productId)
   );
 
