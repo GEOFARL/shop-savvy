@@ -231,18 +231,25 @@ exports.postCartDeleteProduct = (req, res, next) => {
   //   Cart.deleteProduct(prodId, product.price);
   //   res.redirect('/cart');
   // });
+  // req.user
+  //   .getCart()
+  //   .then((cart) => {
+  //     return cart.getProducts({
+  //       where: {
+  //         id: prodId,
+  //       },
+  //     });
+  //   })
+  //   .then(([product]) => {
+  //     return product.cartItem.destroy();
+  //   })
+  //   .then((result) => {
+  //     res.redirect('/cart');
+  //   })
+  //   .catch((e) => console.log(e));
+
   req.user
-    .getCart()
-    .then((cart) => {
-      return cart.getProducts({
-        where: {
-          id: prodId,
-        },
-      });
-    })
-    .then(([product]) => {
-      return product.cartItem.destroy();
-    })
+    .deleteItemFromCart(prodId)
     .then((result) => {
       res.redirect('/cart');
     })
