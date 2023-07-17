@@ -2,6 +2,7 @@ const path = require('path');
 require('dotenv').config();
 
 const express = require('express');
+const mongoose = require('mongoose');
 // const db = require('./util/database');
 // const sequelize = require('./util/database');
 // const Product = require('./models/product');
@@ -13,7 +14,7 @@ const express = require('express');
 
 // const expressHbs = require('express-handlebars').engine;
 
-const { mongoConnect } = require('./util/database');
+// const { mongoConnect } = require('./util/database');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -86,16 +87,25 @@ app.use('/', get404);
 //   })
 //   .catch((e) => console.log(e));
 
-mongoConnect(() => {
-  app.listen(3000);
-  const max = new User('geofarl', 'toper.one11@gmail.com', { items: [] });
-  max
-    .save()
-    // .then((document) => {
-    //   return User.findById(document.value._id).toArray();
-    // })
-    // .then((user) => console.log(user))
-    .catch((e) => console.log(e));
-});
+// mongoConnect(() => {
+//   app.listen(3000);
+//   const max = new User('geofarl', 'toper.one11@gmail.com', { items: [] });
+//   max
+//     .save()
+//     // .then((document) => {
+//     //   return User.findById(document.value._id).toArray();
+//     // })
+//     // .then((user) => console.log(user))
+//     .catch((e) => console.log(e));
+// });
+
+const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.dd2jder.mongodb.net/?retryWrites=true&dbName=shop&w=majority`;
+
+mongoose
+  .connect(uri)
+  .then((result) => {
+    app.listen(3000);
+  })
+  .catch((err) => console.log(err));
 
 // app.listen(3000);
