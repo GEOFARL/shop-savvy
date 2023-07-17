@@ -105,7 +105,7 @@ exports.getEditProduct = (req, res, next) => {
 
 exports.postEditProduct = (req, res, next) => {
   const { title, price, imageUrl, description, productId } = req.body;
-  const { user } = req;
+  // const { user } = req;
   // const updatedProduct = new Product(
   //   title,
   //   imageUrl,
@@ -129,17 +129,30 @@ exports.postEditProduct = (req, res, next) => {
   //   })
   //   .catch((e) => console.log(e));
 
-  const product = new Product(
-    title,
-    price,
-    description,
-    imageUrl,
-    user._id,
-    new ObjectId(productId)
-  );
+  // const product = new Product(
+  //   title,
+  //   price,
+  //   description,
+  //   imageUrl,
+  //   user._id,
+  //   new ObjectId(productId)
+  // );
 
-  product
-    .save()
+  // product
+  //   .save()
+  //   .then((result) => {
+  //     res.redirect('/admin/products');
+  //   })
+  //   .catch((e) => console.log(e));
+
+  Product.findById(productId)
+    .then((product) => {
+      product.title = title;
+      product.price = price;
+      product.description = description;
+      product.imageUrl = imageUrl;
+      return product.save();
+    })
     .then((result) => {
       res.redirect('/admin/products');
     })
@@ -168,7 +181,17 @@ exports.getProducts = (req, res, next) => {
   //   })
   //   .catch((e) => console.log(e));
 
-  Product.fetchAll()
+  // Product.fetchAll()
+  //   .then((products) => {
+  //     res.render('admin/products', {
+  //       products: products,
+  //       docTitle: 'Shop',
+  //       path: '/admin/products',
+  //     });
+  //   })
+  //   .catch((e) => console.log(e));
+
+  Product.find()
     .then((products) => {
       res.render('admin/products', {
         products: products,
