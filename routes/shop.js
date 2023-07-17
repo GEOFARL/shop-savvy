@@ -22,7 +22,7 @@ shopRouter.get('/products/:productId', getProduct);
 shopRouter.get('/cart', getCart);
 shopRouter.post('/cart', postCart);
 shopRouter.post('/cart-delete-item', postCartDeleteProduct);
-// shopRouter.post('/create-order', postOrder);
+shopRouter.post('/create-order', postOrder);
 // shopRouter.get('/orders', getOrders);
 // shopRouter.get('/checkout', getCheckout);
 
