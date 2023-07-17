@@ -37,14 +37,14 @@ app.set('views', 'views');
 app.use(express.urlencoded({ extended: 'true' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use((req, res, next) => {
-//   User.findById('64a3e82ccad39584d0d7d2bb')
-//     .then((user) => {
-//       req.user = new User(user.name, user.email, user.cart, user._id);
-//       next();
-//     })
-//     .catch((e) => console.log(e));
-// });
+app.use((req, res, next) => {
+  User.findById('64b4e5a7be3f4c21e1a35a84')
+    .then((user) => {
+      req.user = new User(user.name, user.email, user.cart, user._id);
+      next();
+    })
+    .catch((e) => console.log(e));
+});
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
@@ -104,6 +104,25 @@ const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWOR
 mongoose
   .connect(uri)
   .then((result) => {
+    User.findOne({ email: 'geofarl345m@gmail.com' })
+      .then((result) => {
+        if (!result) {
+          const user = new User({
+            name: 'Max',
+            email: 'geofarl345m@gmail.com',
+            cart: {
+              items: [],
+            },
+          });
+
+          user.save().catch((saveError) => {
+            console.error('Error saving document:', saveError);
+          });
+        }
+      })
+      .catch((error) => {
+        console.error('Error finding document:', error);
+      });
     app.listen(3000);
   })
   .catch((err) => console.log(err));
