@@ -198,6 +198,8 @@ exports.getProducts = (req, res, next) => {
   //   .catch((e) => console.log(e));
 
   Product.find()
+    // .select('title price')
+    // .populate('userId', 'name')
     .then((products) => {
       res.render('admin/products', {
         products: products,
