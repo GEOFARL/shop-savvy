@@ -37,14 +37,14 @@ app.set('views', 'views');
 app.use(express.urlencoded({ extended: 'true' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use((req, res, next) => {
-  User.findById('64a3e82ccad39584d0d7d2bb')
-    .then((user) => {
-      req.user = new User(user.name, user.email, user.cart, user._id);
-      next();
-    })
-    .catch((e) => console.log(e));
-});
+// app.use((req, res, next) => {
+//   User.findById('64a3e82ccad39584d0d7d2bb')
+//     .then((user) => {
+//       req.user = new User(user.name, user.email, user.cart, user._id);
+//       next();
+//     })
+//     .catch((e) => console.log(e));
+// });
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);

@@ -27,7 +27,17 @@ exports.getProducts = (req, res, next) => {
   //   })
   //   .catch((e) => console.log(e));
 
-  Product.fetchAll()
+  // Product.fetchAll()
+  //   .then((products) => {
+  //     res.render('shop/product-list', {
+  //       products: products,
+  //       docTitle: 'Shop',
+  //       path: '/products',
+  //     });
+  //   })
+  //   .catch((e) => console.log(e));
+
+  Product.find()
     .then((products) => {
       res.render('shop/product-list', {
         products: products,
@@ -120,7 +130,17 @@ exports.getIndex = (req, res, next) => {
   //   })
   //   .catch((e) => console.log(e));
 
-  Product.fetchAll()
+  // Product.fetchAll()
+  //   .then((products) => {
+  //     res.render('shop/index', {
+  //       products: products,
+  //       docTitle: 'All Products',
+  //       path: '/',
+  //     });
+  //   })
+  //   .catch((e) => console.log(e));
+
+  Product.find()
     .then((products) => {
       res.render('shop/index', {
         products: products,
