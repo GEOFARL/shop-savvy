@@ -213,7 +213,12 @@ exports.postDeleteProduct = (req, res, next) => {
   //     res.redirect('/admin/products');
   //   })
   //   .catch((e) => console.log(e));
-  Product.deleteById(prodId)
+  // Product.deleteById(prodId)
+  //   .then(() => {
+  //     res.redirect('/admin/products');
+  //   })
+  //   .catch((e) => console.log(e));
+  Product.findByIdAndRemove(prodId)
     .then(() => {
       res.redirect('/admin/products');
     })
