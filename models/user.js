@@ -153,6 +153,7 @@
 // module.exports = User;
 
 const mongoose = require('mongoose');
+const Product = require('./product');
 
 const Schema = mongoose.Schema;
 
@@ -201,6 +202,20 @@ userSchema.methods.addToCart = function (product) {
   this.cart = updatedCart;
 
   return this.save();
+};
+
+userSchema.methods.getCart = function () {
+  const productIds = this.cart.items.map((i) => i.productId);
+  return Product.find({ _id: { $in: productIds } }).then((products) => {
+    return products.map((p) => {
+      return {
+        ...p.toObject(),
+        quantity: this.cart.items.find((i) => {
+          return i.productId.toString() === p._id.toString();
+        }).quantity,
+      };
+    });
+  });
 };
 
 module.exports = mongoose.model('User', userSchema);
