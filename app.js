@@ -4,6 +4,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 // const db = require('./util/database');
 // const sequelize = require('./util/database');
 // const Product = require('./models/product');
@@ -24,6 +25,10 @@ const { get404 } = require('./controllers/error');
 const User = require('./models/user');
 
 const app = express();
+const store = new MongoDBStore({
+  uri: `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.dd2jder.mongodb.net/?retryWrites=true&dbName=shop&w=majority`,
+  collection: 'sessions',
+});
 
 // app.engine(
 //   'hbs',
@@ -43,6 +48,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store,
     // cookie: {
     //   maxAge: 15000, // Set the session duration to 15 seconds
     // },
