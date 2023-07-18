@@ -3,6 +3,7 @@ require('dotenv').config();
 
 const express = require('express');
 const mongoose = require('mongoose');
+const session = require('express-session');
 // const db = require('./util/database');
 // const sequelize = require('./util/database');
 // const Product = require('./models/product');
@@ -37,6 +38,16 @@ app.set('views', 'views');
 
 app.use(express.urlencoded({ extended: 'true' }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    // cookie: {
+    //   maxAge: 15000, // Set the session duration to 15 seconds
+    // },
+  })
+);
 
 app.use((req, res, next) => {
   User.findById('64b4e5a7be3f4c21e1a35a84')
