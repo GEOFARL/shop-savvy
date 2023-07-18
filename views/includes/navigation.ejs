@@ -11,6 +11,7 @@
           >Products</a
         >
       </li>
+      <% if (isAuthenticated) { %>
       <li class="main-header__item">
         <a href="/cart" class="<%= path === '/cart' ? 'active' : '' %>">Cart</a>
       </li>
@@ -19,7 +20,6 @@
           >Orders</a
         >
       </li>
-      <% if (isAuthenticated) { %>
       <li class="main-header__item">
         <a
           href="/admin/add-product"
@@ -37,16 +37,19 @@
       <% } %>
     </ul>
     <ul class="main-header__item-list">
+      <% if (!isAuthenticated) { %>
       <li class="main-header__item">
         <a href="/login" lass="<%= path === '/login' ? 'active' : '' %>"
           >Login</a
         >
       </li>
+      <% } else { %>
       <li class="main-header__item">
         <form action="/logout" method="post">
           <button type="submit">Logout</button>
         </form>
       </li>
+      <% } %>
     </ul>
   </nav>
 </header>
