@@ -19,3 +19,12 @@ exports.postLogin = (req, res, next) => {
     })
     .catch((e) => console.log(e));
 };
+
+exports.postLogout = (req, res, next) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.log(err);
+    }
+    res.redirect('/');
+  });
+};
