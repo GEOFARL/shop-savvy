@@ -131,7 +131,7 @@ mongoose
       .then((result) => {
         if (!result) {
           const user = new User({
-            name: 'Max',
+            password: '123456',
             email: 'geofarl345m@gmail.com',
             cart: {
               items: [],

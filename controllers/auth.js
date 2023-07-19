@@ -1,3 +1,4 @@
+const bcryptjs = require('bcryptjs');
 const User = require('../models/user');
 
 exports.getSignup = (req, res, next) => {
@@ -8,7 +9,33 @@ exports.getSignup = (req, res, next) => {
   });
 };
 
-exports.postSignup = (req, res, next) => {};
+exports.postSignup = (req, res, next) => {
+  const { email, password, confirmPassword } = req.body;
+
+  User.findOne({ email })
+    .then((user) => {
+      if (user) {
+        return res.redirect('/signup');
+      }
+      return bcryptjs
+        .hash(password, 12)
+        .then((hashedPassword) => {
+          const newUser = new User({
+            email,
+            password: hashedPassword,
+            cart: {
+              items: [],
+            },
+          });
+
+          return newUser.save();
+        })
+        .then(() => res.redirect('/login'));
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 exports.getLogin = (req, res, next) => {
   // const isLoggedIn = req.get('Cookie').split('=')[1] === 'true';
@@ -21,7 +48,7 @@ exports.getLogin = (req, res, next) => {
 
 exports.postLogin = (req, res, next) => {
   // res.setHeader('Set-Cookie', 'loggedIn=true');
-  User.findById('64b4e5a7be3f4c21e1a35a84')
+  User.findById('64b7e4ad7175181e7ad5e424')
     .then((user) => {
       req.session.isLoggedIn = true;
       req.session.user = user;
