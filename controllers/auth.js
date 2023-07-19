@@ -1,5 +1,15 @@
 const User = require('../models/user');
 
+exports.getSignup = (req, res, next) => {
+  res.render('auth/signup', {
+    path: '/signup',
+    docTitle: 'Signup',
+    isAuthenticated: false,
+  });
+};
+
+exports.postSignup = (req, res, next) => {};
+
 exports.getLogin = (req, res, next) => {
   // const isLoggedIn = req.get('Cookie').split('=')[1] === 'true';
   res.render('auth/login', {
