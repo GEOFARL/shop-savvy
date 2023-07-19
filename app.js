@@ -127,25 +127,25 @@ const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWOR
 mongoose
   .connect(uri)
   .then((result) => {
-    User.findOne({ email: 'geofarl345m@gmail.com' })
-      .then((result) => {
-        if (!result) {
-          const user = new User({
-            password: '123456',
-            email: 'geofarl345m@gmail.com',
-            cart: {
-              items: [],
-            },
-          });
+    // User.findOne({ email: 'geofarl345m@gmail.com' })
+    //   .then((result) => {
+    //     if (!result) {
+    //       const user = new User({
+    //         password: '123456',
+    //         email: 'geofarl345m@gmail.com',
+    //         cart: {
+    //           items: [],
+    //         },
+    //       });
 
-          user.save().catch((saveError) => {
-            console.error('Error saving document:', saveError);
-          });
-        }
-      })
-      .catch((error) => {
-        console.error('Error finding document:', error);
-      });
+    //       user.save().catch((saveError) => {
+    //         console.error('Error saving document:', saveError);
+    //       });
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error finding document:', error);
+    //   });
     app.listen(3000);
   })
   .catch((err) => console.log(err));

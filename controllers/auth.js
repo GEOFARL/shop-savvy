@@ -48,16 +48,34 @@ exports.getLogin = (req, res, next) => {
 
 exports.postLogin = (req, res, next) => {
   // res.setHeader('Set-Cookie', 'loggedIn=true');
-  User.findById('64b7e4ad7175181e7ad5e424')
+
+  const { email, password } = req.body;
+  User.findOne({ email })
     .then((user) => {
-      req.session.isLoggedIn = true;
-      req.session.user = user;
-      req.session.save((err) => {
-        if (err) {
+      if (!user) {
+        return res.redirect('/login');
+      }
+
+      bcryptjs
+        .compare(password, user.password)
+        .then((doMatch) => {
+          if (doMatch) {
+            req.session.isLoggedIn = true;
+            req.session.user = user;
+            req.session.save((err) => {
+              if (err) {
+                console.log(err);
+              }
+              res.redirect('/');
+            });
+          } else {
+            res.redirect('/login');
+          }
+        })
+        .catch((err) => {
           console.log(err);
-        }
-        res.redirect('/');
-      });
+          res.redirect('/login');
+        });
     })
     .catch((e) => console.log(e));
 };
