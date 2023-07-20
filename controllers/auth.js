@@ -5,15 +5,22 @@ exports.getSignup = (req, res, next) => {
   res.render('auth/signup', {
     path: '/signup',
     docTitle: 'Signup',
+    errorMessage: req.flash('error'),
   });
 };
 
 exports.postSignup = (req, res, next) => {
   const { email, password, confirmPassword } = req.body;
 
+  if (password !== confirmPassword) {
+    req.flash('error', 'Passwords do not match');
+    return res.redirect('/signup');
+  }
+
   User.findOne({ email })
     .then((user) => {
       if (user) {
+        req.flash('error', 'User with this email already exists');
         return res.redirect('/signup');
       }
       return bcryptjs
@@ -41,6 +48,7 @@ exports.getLogin = (req, res, next) => {
   res.render('auth/login', {
     path: '/login',
     docTitle: 'Login',
+    errorMessage: req.flash('error'),
   });
 };
 
@@ -51,6 +59,7 @@ exports.postLogin = (req, res, next) => {
   User.findOne({ email })
     .then((user) => {
       if (!user) {
+        req.flash('error', 'Invalid email or password');
         return res.redirect('/login');
       }
 
@@ -67,6 +76,7 @@ exports.postLogin = (req, res, next) => {
               res.redirect('/');
             });
           } else {
+            req.flash('error', 'Invalid email or password');
             res.redirect('/login');
           }
         })
