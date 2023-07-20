@@ -5,6 +5,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
+const csrf = require('csurf');
 // const db = require('./util/database');
 // const sequelize = require('./util/database');
 // const Product = require('./models/product');
@@ -29,6 +30,7 @@ const store = new MongoDBStore({
   uri: `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.dd2jder.mongodb.net/?retryWrites=true&dbName=shop&w=majority`,
   collection: 'sessions',
 });
+const csrfProtection = csrf();
 
 // app.engine(
 //   'hbs',
@@ -54,6 +56,7 @@ app.use(
     // },
   })
 );
+app.use(csrfProtection);
 
 app.use((req, res, next) => {
   if (req.session.user) {
@@ -66,6 +69,12 @@ app.use((req, res, next) => {
   } else {
     next();
   }
+});
+
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
 });
 
 app.use('/admin', adminRoutes);
