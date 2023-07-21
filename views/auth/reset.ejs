@@ -10,7 +10,7 @@
       <% if (errorMessage.length !== 0) { %>
         <div class="user-message user-message--error"><%= errorMessage %></div>
       <% } %>
-      <form class="login-form" action="/login" method="POST">
+      <form class="login-form" action="/reset" method="POST">
         <input type="hidden" value="<%= csrfToken %>" name="_csrf" />
         <div class="form-control">
           <label for="email">Email</label>
