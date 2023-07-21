@@ -200,7 +200,7 @@ exports.getProducts = (req, res, next) => {
   //   })
   //   .catch((e) => console.log(e));
 
-  Product.find()
+  Product.find({ userId: req.user._id })
     // .select('title price')
     // .populate('userId', 'name')
     .then((products) => {
