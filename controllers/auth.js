@@ -52,7 +52,7 @@ exports.postSignup = (req, res, next) => {
           res.redirect('/login');
           return transporter.sendMail({
             to: email,
-            from: 'toper.one111@gmail.com',
+            from: process.env.SENDER_EMAIL,
             subject: 'Signup succeeded',
             html: '<h1>You successfully signed up</h1>',
           });
@@ -169,7 +169,33 @@ exports.getNewPassword = (req, res, next) => {
         docTitle: 'New Password',
         errorMessage: req.flash('error'),
         userId: user._id.toString(),
+        passwordToken: token,
       });
+    })
+    .catch((err) => console.log(err));
+};
+
+exports.postNewPassword = (req, res, next) => {
+  const { password: newPassword, userId, passwordToken } = req.body;
+  let resetUser;
+
+  User.findOne({
+    resetToken: passwordToken,
+    resetTokenExpiration: { $gt: Date.now() },
+    _id: userId,
+  })
+    .then((user) => {
+      resetUser = user;
+      return bcryptjs.hash(newPassword, 10);
+    })
+    .then((hashedPassword) => {
+      resetUser.password = hashedPassword;
+      resetUser.resetToken = undefined;
+      resetUser.resetTokenExpiration = undefined;
+      return resetUser.save();
+    })
+    .then((result) => {
+      res.redirect('/login');
     })
     .catch((err) => console.log(err));
 };
