@@ -1,6 +1,7 @@
 const express = require('express');
 
 const { check, body } = require('express-validator');
+const User = require('../models/user');
 
 const {
   getLogin,
@@ -16,7 +17,24 @@ const {
 const router = express.Router();
 
 router.get('/login', getLogin);
-router.post('/login', postLogin);
+router.post(
+  '/login',
+  [
+    body('email')
+      .isEmail({ domain_specific_validation: true })
+      .withMessage('Please enter a valid email')
+      .custom((value) => {
+        return User.findOne({ email: value }).then((user) => {
+          if (!user) {
+            return Promise.reject('Invalid email or password');
+          }
+        });
+      }),
+    ,
+    body('password'),
+  ],
+  postLogin
+);
 router.post('/logout', postLogout);
 router.get('/signup', getSignup);
 router.post(
@@ -25,11 +43,16 @@ router.post(
     check('email')
       .isEmail({ domain_specific_validation: true })
       .withMessage('Please enter a valid email')
-      .custom((value, { req }) => {
-        if (value === 'test@test.com') {
-          throw new Error('This email address is forbidden');
-        }
-        return true;
+      .custom((value) => {
+        // if (value === 'test@test.com') {
+        //   throw new Error('This email address is forbidden');
+        // }
+        // return true;
+        return User.findOne({ email: value }).then((user) => {
+          if (user) {
+            return Promise.reject('User with this email already exists');
+          }
+        });
       }),
     body('password')
       .isLength({ min: 8 })
