@@ -2,6 +2,7 @@ const bcryptjs = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const sendgridTransport = require('nodemailer-sendgrid-transport');
 const crypto = require('crypto');
+const { validationResult } = require('express-validator');
 
 const User = require('../models/user');
 
@@ -24,10 +25,17 @@ exports.getSignup = (req, res, next) => {
 exports.postSignup = (req, res, next) => {
   const { email, password, confirmPassword } = req.body;
 
-  if (password !== confirmPassword) {
-    req.flash('error', 'Passwords do not match');
-    return res.redirect('/signup');
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.status(422).render('auth/signup', {
+      path: '/signup',
+      docTitle: 'Signup',
+      errorMessage: errors.array()[0].msg,
+    });
   }
+  console.log(errors);
 
   User.findOne({ email })
     .then((user) => {
