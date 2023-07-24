@@ -125,6 +125,9 @@ exports.getEditProduct = (req, res, next) => {
         path: '/admin/edit-product',
         editing: editMode,
         product: product,
+        errorMessage: req.flash('error'),
+        oldInputs: { title: '', imageUrl: '', price: '', description: '' },
+        validationErrors: [],
       });
     })
     .catch((e) => console.log(e));
@@ -172,11 +175,26 @@ exports.postEditProduct = (req, res, next) => {
   //   })
   //   .catch((e) => console.log(e));
 
+  const errors = validationResult(req);
+
   Product.findById(productId)
     .then((product) => {
       if (product.userId.toString() !== req.user._id.toString()) {
         return res.redirect('/');
       }
+
+      if (!errors.isEmpty()) {
+        return res.status(422).render('admin/edit-product', {
+          docTitle: 'Edit Product',
+          path: '/admin/edit-product',
+          editing: true,
+          product: product,
+          errorMessage: errors.array()[0].msg,
+          oldInputs: { title, imageUrl, price, description },
+          validationErrors: errors.array(),
+        });
+      }
+
       product.title = title;
       product.price = price;
       product.description = description;

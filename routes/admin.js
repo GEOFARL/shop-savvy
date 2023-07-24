@@ -23,7 +23,7 @@ router.post(
   '/add-product',
   [
     body('title')
-      .isAlphanumeric()
+      .isString()
       .isLength({ min: 3 })
       .trim()
       .withMessage('Title should be at least 3 characters long'),
@@ -46,7 +46,7 @@ router.post(
   '/edit-product',
   [
     body('title')
-      .isAlphanumeric()
+      .isString()
       .isLength({ min: 3 })
       .trim()
       .withMessage('Title should be at least 3 characters long'),

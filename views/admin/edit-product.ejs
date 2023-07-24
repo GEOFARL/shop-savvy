@@ -55,8 +55,7 @@
             rows="10"
             style="resize: none;"
             class="<%= validationErrors.find(e => e.path === 'description') ? 'invalid' : '' %>"
-          ><% if (editing) { %><%= product.description %><% } else { %><%= oldInputs.description %><% } %>
-          </textarea>
+          ><% if (editing) { %><%= product.description %><% } else { %><%= oldInputs.description %><% } %></textarea>
         </div>
 
         <% if (editing) { %>
