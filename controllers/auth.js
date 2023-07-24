@@ -70,7 +70,10 @@ exports.postSignup = (req, res, next) => {
         html: '<h1>You successfully signed up</h1>',
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.status(500).redirect('/500');
+    });
 };
 
 // @desc    Get a login page
@@ -114,6 +117,7 @@ exports.postLogin = (req, res, next) => {
             req.session.save((err) => {
               if (err) {
                 console.log(err);
+                return res.redirect('/500');
               }
               res.redirect('/');
             });
@@ -139,7 +143,10 @@ exports.postLogin = (req, res, next) => {
           });
         });
     })
-    .catch((e) => console.log(e));
+    .catch((err) => {
+      console.log(err);
+      res.status(500).redirect('/500');
+    });
 };
 
 // @desc    Logout a user
@@ -149,8 +156,8 @@ exports.postLogout = (req, res, next) => {
   req.session.destroy((err) => {
     if (err) {
       console.log(err);
+      return res.status(500).redirect('/500');
     }
-    res.redirect('/');
   });
 };
 

@@ -13,7 +13,10 @@ exports.getProducts = (req, res, next) => {
         path: '/products',
       });
     })
-    .catch((e) => console.log(e));
+    .catch((err) => {
+      console.log(err);
+      res.status(500).redirect('/500');
+    });
 };
 
 // @desc    Get a specific product page
@@ -29,7 +32,10 @@ exports.getProduct = (req, res, next) => {
         path: '/products',
       });
     })
-    .catch((e) => console.log(e));
+    .catch((err) => {
+      console.log(err);
+      res.status(500).redirect('/500');
+    });
 };
 
 // @desc    Get home page
@@ -44,7 +50,10 @@ exports.getIndex = (req, res, next) => {
         path: '/',
       });
     })
-    .catch((e) => console.log(e));
+    .catch((err) => {
+      console.log(err);
+      res.status(500).redirect('/500');
+    });
 };
 
 // @desc    Get a user's cart page
@@ -61,7 +70,10 @@ exports.getCart = (req, res, next) => {
         products: products,
       });
     })
-    .catch((e) => console.log(e));
+    .catch((err) => {
+      console.log(err);
+      res.status(500).redirect('/500');
+    });
 };
 
 // @desc    Add a product to the cart
@@ -74,7 +86,11 @@ exports.postCart = (req, res, next) => {
     .then((product) => {
       req.user.addToCart(product);
     })
-    .then(() => res.redirect('/cart'));
+    .then(() => res.redirect('/cart'))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).redirect('/500');
+    });
 };
 
 // @desc    Delete a product from the cart
@@ -87,7 +103,10 @@ exports.postCartDeleteProduct = (req, res, next) => {
     .then((result) => {
       res.redirect('/cart');
     })
-    .catch((e) => console.log(e));
+    .catch((err) => {
+      console.log(err);
+      res.status(500).redirect('/500');
+    });
 };
 
 // @desc    Create a new order
@@ -117,7 +136,10 @@ exports.postOrder = (req, res, next) => {
     .then(() => {
       res.redirect('/orders');
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.status(500).redirect('/500');
+    });
 };
 
 // @desc    Get a page with user's orders
@@ -132,5 +154,8 @@ exports.getOrders = (req, res, next) => {
         orders: orders,
       });
     })
-    .catch((e) => console.log(e));
+    .catch((err) => {
+      console.log(err);
+      res.status(500).redirect('/500');
+    });
 };

@@ -46,7 +46,10 @@ exports.postAddProduct = (req, res, next) => {
     .then((result) => {
       res.redirect('/');
     })
-    .catch((e) => console.log(e));
+    .catch((e) => {
+      console.log(e);
+      res.status(500).redirect('/500');
+    });
 };
 
 // @desc    Get a page for editing the product
@@ -74,7 +77,10 @@ exports.getEditProduct = (req, res, next) => {
         validationErrors: [],
       });
     })
-    .catch((e) => console.log(e));
+    .catch((e) => {
+      console.log(e);
+      res.status(500).redirect('/500');
+    });
 };
 
 // @desc    Edit the product
@@ -111,7 +117,10 @@ exports.postEditProduct = (req, res, next) => {
         res.redirect('/admin/products');
       });
     })
-    .catch((e) => console.log(e));
+    .catch((e) => {
+      console.log(e);
+      res.status(500).redirect('/500');
+    });
 };
 
 // @desc    Get a page with all of the admin products
@@ -126,7 +135,10 @@ exports.getProducts = (req, res, next) => {
         path: '/admin/products',
       });
     })
-    .catch((e) => console.log(e));
+    .catch((e) => {
+      console.log(e);
+      res.status(500).redirect('/500');
+    });
 };
 
 // @desc    Delete a product
@@ -139,5 +151,8 @@ exports.postDeleteProduct = (req, res, next) => {
     .then(() => {
       res.redirect('/admin/products');
     })
-    .catch((e) => console.log(e));
+    .catch((e) => {
+      console.log(e);
+      res.status(500).redirect('/500');
+    });
 };

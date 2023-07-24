@@ -11,7 +11,7 @@ const flash = require('connect-flash');
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
-const { get404 } = require('./controllers/error');
+const { get404, get500 } = require('./controllers/error');
 const User = require('./models/user');
 
 const app = express();
@@ -42,10 +42,15 @@ app.use((req, res, next) => {
   if (req.session.user) {
     User.findById(req.session.user._id)
       .then((user) => {
+        if (!user) {
+          return next();
+        }
         req.user = user;
         next();
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        throw new Error(e);
+      });
   } else {
     next();
   }
@@ -60,6 +65,8 @@ app.use((req, res, next) => {
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
+
+app.get('/500', get500);
 
 app.use('/', get404);
 
