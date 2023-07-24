@@ -24,6 +24,7 @@ exports.getSignup = (req, res, next) => {
       password: '',
       confirmPassword: '',
     },
+    validationErrors: [],
   });
 };
 
@@ -32,12 +33,15 @@ exports.postSignup = (req, res, next) => {
 
   const errors = validationResult(req);
 
+  console.log(errors.array());
+
   if (!errors.isEmpty()) {
     return res.status(422).render('auth/signup', {
       path: '/signup',
       docTitle: 'Signup',
       errorMessage: errors.array()[0].msg,
       oldInput: { email, password, confirmPassword },
+      validationErrors: errors.array(),
     });
   }
   bcryptjs
@@ -72,6 +76,7 @@ exports.getLogin = (req, res, next) => {
     docTitle: 'Login',
     errorMessage: req.flash('error'),
     oldInput: { email: '', password: '' },
+    validationErrors: [],
   });
 };
 
@@ -86,6 +91,7 @@ exports.postLogin = (req, res, next) => {
       docTitle: 'Login',
       errorMessage: errors.array()[0].msg,
       oldInput: { email, password },
+      validationErrors: errors.array(),
     });
   }
 
@@ -110,6 +116,7 @@ exports.postLogin = (req, res, next) => {
               docTitle: 'Login',
               errorMessage: req.flash('error'),
               oldInput: { email, password },
+              validationErrors: [{ param: 'email' }, { param: 'password' }],
             });
           }
         })
@@ -120,6 +127,7 @@ exports.postLogin = (req, res, next) => {
             docTitle: 'Login',
             errorMessage: req.flash('error'),
             oldInput: { email, password },
+            validationErrors: [{ param: 'email' }, { param: 'password' }],
           });
         });
     })
@@ -140,6 +148,7 @@ exports.getReset = (req, res, next) => {
     path: '/reset',
     docTitle: 'Reset Password',
     errorMessage: req.flash('error'),
+    validationErrors: [],
   });
 };
 
@@ -188,6 +197,7 @@ exports.getNewPassword = (req, res, next) => {
         userId: user._id.toString(),
         passwordToken: token,
         oldInput: { password: '' },
+        validationErrors: [],
       });
     })
     .catch((err) => console.log(err));
@@ -207,6 +217,7 @@ exports.postNewPassword = (req, res, next) => {
       userId,
       passwordToken,
       oldInput: { password: newPassword },
+      validationErrors: errors.array(),
     });
   }
 

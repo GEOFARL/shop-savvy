@@ -247,6 +247,14 @@ form {
   background-color: rgb(250, 212, 212);
 }
 
+.form-control .invalid {
+  border: 2px solid red;
+}
+
+.form-control .invalid:focus {
+  outline: 2px solid red;
+}
+
 @media (min-width: 768px) {
   .main-header__nav {
     display: flex;
