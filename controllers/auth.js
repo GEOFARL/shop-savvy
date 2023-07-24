@@ -71,8 +71,9 @@ exports.postSignup = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
-      res.status(500).redirect('/500');
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -144,8 +145,9 @@ exports.postLogin = (req, res, next) => {
         });
     })
     .catch((err) => {
-      console.log(err);
-      res.status(500).redirect('/500');
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -155,8 +157,9 @@ exports.postLogin = (req, res, next) => {
 exports.postLogout = (req, res, next) => {
   req.session.destroy((err) => {
     if (err) {
-      console.log(err);
-      return res.status(500).redirect('/500');
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     }
   });
 };
@@ -203,7 +206,11 @@ exports.postReset = (req, res, next) => {
           });
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+      });
   });
 };
 
@@ -227,7 +234,11 @@ exports.getNewPassword = (req, res, next) => {
         validationErrors: [],
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 // @desc    Submit a new user password
@@ -269,5 +280,9 @@ exports.postNewPassword = (req, res, next) => {
     .then((result) => {
       res.redirect('/login');
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };

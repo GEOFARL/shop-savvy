@@ -70,6 +70,12 @@ app.get('/500', get500);
 
 app.use('/', get404);
 
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.status(500);
+  res.redirect('/500');
+});
+
 const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.dd2jder.mongodb.net/?retryWrites=true&dbName=shop&w=majority`;
 
 mongoose

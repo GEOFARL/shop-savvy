@@ -47,8 +47,9 @@ exports.postAddProduct = (req, res, next) => {
       res.redirect('/');
     })
     .catch((e) => {
-      console.log(e);
-      res.status(500).redirect('/500');
+      const error = new Error(e);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -78,8 +79,9 @@ exports.getEditProduct = (req, res, next) => {
       });
     })
     .catch((e) => {
-      console.log(e);
-      res.status(500).redirect('/500');
+      const error = new Error(e);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -118,8 +120,9 @@ exports.postEditProduct = (req, res, next) => {
       });
     })
     .catch((e) => {
-      console.log(e);
-      res.status(500).redirect('/500');
+      const error = new Error(e);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -136,8 +139,9 @@ exports.getProducts = (req, res, next) => {
       });
     })
     .catch((e) => {
-      console.log(e);
-      res.status(500).redirect('/500');
+      const error = new Error(e);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -152,7 +156,8 @@ exports.postDeleteProduct = (req, res, next) => {
       res.redirect('/admin/products');
     })
     .catch((e) => {
-      console.log(e);
-      res.status(500).redirect('/500');
+      const error = new Error(e);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
