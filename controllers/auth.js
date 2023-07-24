@@ -33,8 +33,6 @@ exports.postSignup = (req, res, next) => {
 
   const errors = validationResult(req);
 
-  console.log(errors.array());
-
   if (!errors.isEmpty()) {
     return res.status(422).render('auth/signup', {
       path: '/signup',

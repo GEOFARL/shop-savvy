@@ -29,7 +29,8 @@ router.post(
             return Promise.reject('Invalid email or password');
           }
         });
-      }),
+      })
+      .normalizeEmail(),
   ],
   postLogin
 );
@@ -51,7 +52,8 @@ router.post(
             return Promise.reject('User with this email already exists');
           }
         });
-      }),
+      })
+      .normalizeEmail(),
     body('password')
       .isLength({ min: 8 })
       .withMessage('Password must be at least 8 characters long')
@@ -60,13 +62,16 @@ router.post(
       .matches(/[A-Z]/)
       .withMessage('Password must contain at least one uppercase letter')
       .matches(/\d/)
-      .withMessage('Password must contain at least one number'),
-    body('confirmPassword').custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error('Passwords do not match');
-      }
-      return true;
-    }),
+      .withMessage('Password must contain at least one number')
+      .trim(),
+    body('confirmPassword')
+      .trim()
+      .custom((value, { req }) => {
+        if (value !== req.body.password) {
+          throw new Error('Passwords do not match');
+        }
+        return true;
+      }),
   ],
   postSignup
 );
@@ -83,7 +88,8 @@ router.post(
     .matches(/[A-Z]/)
     .withMessage('Password must contain at least one uppercase letter')
     .matches(/\d/)
-    .withMessage('Password must contain at least one number'),
+    .withMessage('Password must contain at least one number')
+    .trim(),
   postNewPassword
 );
 
