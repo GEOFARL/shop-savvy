@@ -27,7 +27,6 @@ router.post(
       .isLength({ min: 3 })
       .trim()
       .withMessage('Title should be at least 3 characters long'),
-    body('imageUrl').isURL().withMessage('Invalid URL'),
     body('price').isFloat().withMessage('Price should be a float number'),
     body('description')
       .isLength({ min: 5, max: 400 })
@@ -50,7 +49,6 @@ router.post(
       .isLength({ min: 3 })
       .trim()
       .withMessage('Title should be at least 3 characters long'),
-    body('imageUrl').isURL().withMessage('Invalid URL'),
     body('price').isFloat().withMessage('Price should be a float number'),
     body('description')
       .isLength({ min: 5, max: 400 })

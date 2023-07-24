@@ -19,7 +19,10 @@ exports.getAddProduct = (req, res, next) => {
 // @route   POST /admin/add-product
 // @access  Private
 exports.postAddProduct = (req, res, next) => {
-  const { title, imageUrl, price, description } = req.body;
+  const { title, price, description } = req.body;
+  const image = req.file;
+
+  console.log(image);
 
   const errors = validationResult(req);
 
