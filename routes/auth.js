@@ -3,6 +3,8 @@ const express = require('express');
 const { check, body } = require('express-validator');
 const User = require('../models/user');
 
+const isAuth = require('../middleware/is-auth');
+
 const {
   getLogin,
   postLogin,
@@ -34,7 +36,7 @@ router.post(
   ],
   postLogin
 );
-router.post('/logout', postLogout);
+router.post('/logout', isAuth, postLogout);
 router.get('/signup', getSignup);
 router.post(
   '/signup',
@@ -43,10 +45,6 @@ router.post(
       .isEmail({ domain_specific_validation: true })
       .withMessage('Please enter a valid email')
       .custom((value) => {
-        // if (value === 'test@test.com') {
-        //   throw new Error('This email address is forbidden');
-        // }
-        // return true;
         return User.findOne({ email: value }).then((user) => {
           if (user) {
             return Promise.reject('User with this email already exists');

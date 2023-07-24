@@ -1,11 +1,10 @@
 const Product = require('../models/product');
-const { ObjectId } = require('mongodb');
 const { validationResult } = require('express-validator');
 
+// @desc    Get a page for adding a new product
+// @route   GET /signup
+// @access  Private
 exports.getAddProduct = (req, res, next) => {
-  // if (!req.session.isLoggedIn) {
-  //   return res.redirect('/login');
-  // }
   res.render('admin/edit-product', {
     docTitle: 'Add Product',
     path: '/admin/add-product',
@@ -16,6 +15,9 @@ exports.getAddProduct = (req, res, next) => {
   });
 };
 
+// @desc    Add a new product
+// @route   POST /admin/add-product
+// @access  Private
 exports.postAddProduct = (req, res, next) => {
   const { title, imageUrl, price, description } = req.body;
 
@@ -45,75 +47,17 @@ exports.postAddProduct = (req, res, next) => {
       res.redirect('/');
     })
     .catch((e) => console.log(e));
-  // req.user
-  //   .createProduct({
-  //     title,
-  //     price,
-  //     imageUrl,
-  //     description,
-  //   })
-  //   .then((result) => {
-  //     // console.log(result);
-  //     res.redirect('/');
-  //   })
-  //   .catch((e) => console.log(e));
-  // const product = new Product(title, imageUrl, price, description);
-  // product.save();
-  // product
-  //   .save()
-  //   .then(() => {
-  //     res.redirect('/');
-  //   })
-  //   .catch((e) => console.log(e));
-  // res.redirect('/');
 };
 
+// @desc    Get a page for editing the product
+// @route   GET /admin/edit-product/:productId
+// @access  Private
 exports.getEditProduct = (req, res, next) => {
   const editMode = req.query.edit;
   if (!editMode) {
     return res.redirect('/');
   }
   const prodId = req.params.productId;
-  // Product.findById(prodId, (product) => {
-  //   if (!product) {
-  //     return res.redirect('/');
-  //   }
-  //   res.render('admin/edit-product', {
-  //     docTitle: 'Edit Product',
-  //     path: '/admin/edit-product',
-  //     editing: editMode,
-  //     product,
-  //   });
-  // });
-
-  // Product.findByPk(prodId)
-  //   .then((product) => {
-  //     if (!product) {
-  //       return res.redirect('/');
-  //     }
-  //     res.render('admin/edit-product', {
-  //       docTitle: 'Edit Product',
-  //       path: '/admin/edit-product',
-  //       editing: editMode,
-  //       product: product,
-  //     });
-  //   })
-  //   .catch((e) => console.log(e));
-
-  // req.user
-  //   .getProducts({ where: { id: prodId } })
-  //   .then(([product]) => {
-  //     if (!product) {
-  //       return res.redirect('/');
-  //     }
-  //     res.render('admin/edit-product', {
-  //       docTitle: 'Edit Product',
-  //       path: '/admin/edit-product',
-  //       editing: editMode,
-  //       product: product,
-  //     });
-  //   })
-  //   .catch((e) => console.log(e));
 
   Product.findById(prodId)
     .then((product) => {
@@ -133,47 +77,11 @@ exports.getEditProduct = (req, res, next) => {
     .catch((e) => console.log(e));
 };
 
+// @desc    Edit the product
+// @route   POST /admin/edit-product/
+// @access  Private
 exports.postEditProduct = (req, res, next) => {
   const { title, price, imageUrl, description, productId } = req.body;
-  // const { user } = req;
-  // const updatedProduct = new Product(
-  //   title,
-  //   imageUrl,
-  //   price,
-  //   description,
-  //   productId
-  // );
-  // updatedProduct.save();
-
-  // Product.findByPk(productId)
-  //   .then((product) => {
-  //     product.title = title;
-  //     product.price = price;
-  //     product.description = description;
-  //     product.imageUrl = imageUrl;
-  //     return product.save();
-  //   })
-  //   .then((result) => {
-  //     console.log('UPDATED PRODUCT');
-  //     res.redirect('/admin/products');
-  //   })
-  //   .catch((e) => console.log(e));
-
-  // const product = new Product(
-  //   title,
-  //   price,
-  //   description,
-  //   imageUrl,
-  //   user._id,
-  //   new ObjectId(productId)
-  // );
-
-  // product
-  //   .save()
-  //   .then((result) => {
-  //     res.redirect('/admin/products');
-  //   })
-  //   .catch((e) => console.log(e));
 
   const errors = validationResult(req);
 
@@ -204,43 +112,13 @@ exports.postEditProduct = (req, res, next) => {
       });
     })
     .catch((e) => console.log(e));
-
-  // res.redirect('/admin/products');
 };
 
+// @desc    Get a page with all of the admin products
+// @route   GET /admin/products
+// @access  Private
 exports.getProducts = (req, res, next) => {
-  // Product.fetchAll((products) => {
-  //   res.render('admin/products', {
-  //     products,
-  //     docTitle: 'Shop',
-  //     path: '/admin/products',
-  //   });
-  // });
-
-  // req.user
-  //   .getProducts()
-  //   .then((products) => {
-  //     res.render('admin/products', {
-  //       products: products,
-  //       docTitle: 'Shop',
-  //       path: '/admin/products',
-  //     });
-  //   })
-  //   .catch((e) => console.log(e));
-
-  // Product.fetchAll()
-  //   .then((products) => {
-  //     res.render('admin/products', {
-  //       products: products,
-  //       docTitle: 'Shop',
-  //       path: '/admin/products',
-  //     });
-  //   })
-  //   .catch((e) => console.log(e));
-
   Product.find({ userId: req.user._id })
-    // .select('title price')
-    // .populate('userId', 'name')
     .then((products) => {
       res.render('admin/products', {
         products: products,
@@ -251,26 +129,15 @@ exports.getProducts = (req, res, next) => {
     .catch((e) => console.log(e));
 };
 
+// @desc    Delete a product
+// @route   DELETE /admin/delete-product
+// @access  Private
 exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  // Product.deleteById(prodId);
-  // Product.findByPk(prodId)
-  //   .then((product) => {
-  //     return product.destroy();
-  //   })
-  //   .then((result) => {
-  //     res.redirect('/admin/products');
-  //   })
-  //   .catch((e) => console.log(e));
-  // Product.deleteById(prodId)
-  //   .then(() => {
-  //     res.redirect('/admin/products');
-  //   })
-  //   .catch((e) => console.log(e));
+
   Product.deleteOne({ _id: prodId, userId: req.user._id })
     .then(() => {
       res.redirect('/admin/products');
     })
     .catch((e) => console.log(e));
-  // res.redirect('/admin/products');
 };

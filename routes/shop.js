@@ -9,7 +9,6 @@ const {
   getProducts,
   getCart,
   postCart,
-  getCheckout,
   getOrders,
   getProduct,
   postCartDeleteProduct,
@@ -26,6 +25,5 @@ shopRouter.post('/cart', isAuth, postCart);
 shopRouter.post('/cart-delete-item', isAuth, postCartDeleteProduct);
 shopRouter.post('/create-order', isAuth, postOrder);
 shopRouter.get('/orders', isAuth, getOrders);
-// shopRouter.get('/checkout', getCheckout);
 
 module.exports = shopRouter;

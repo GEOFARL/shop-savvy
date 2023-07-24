@@ -14,6 +14,9 @@ const transporter = nodemailer.createTransport(
   })
 );
 
+// @desc    Get a signup page
+// @route   GET /signup
+// @access  Public
 exports.getSignup = (req, res, next) => {
   res.render('auth/signup', {
     path: '/signup',
@@ -28,6 +31,9 @@ exports.getSignup = (req, res, next) => {
   });
 };
 
+// @desc    Sign up a new user
+// @route   POST /signup
+// @access  Public
 exports.postSignup = (req, res, next) => {
   const { email, password, confirmPassword } = req.body;
 
@@ -67,8 +73,10 @@ exports.postSignup = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
+// @desc    Get a login page
+// @route   GET /login
+// @access  Public
 exports.getLogin = (req, res, next) => {
-  // const isLoggedIn = req.get('Cookie').split('=')[1] === 'true';
   res.render('auth/login', {
     path: '/login',
     docTitle: 'Login',
@@ -78,8 +86,10 @@ exports.getLogin = (req, res, next) => {
   });
 };
 
+// @desc    Login a user
+// @route   POST /login
+// @access  Public
 exports.postLogin = (req, res, next) => {
-  // res.setHeader('Set-Cookie', 'loggedIn=true');
   const { email, password } = req.body;
   const errors = validationResult(req);
 
@@ -132,6 +142,9 @@ exports.postLogin = (req, res, next) => {
     .catch((e) => console.log(e));
 };
 
+// @desc    Logout a user
+// @route   POST /logout
+// @access  Private
 exports.postLogout = (req, res, next) => {
   req.session.destroy((err) => {
     if (err) {
@@ -141,6 +154,9 @@ exports.postLogout = (req, res, next) => {
   });
 };
 
+// @desc    Get a reset password page
+// @route   GET /reset
+// @access  Public
 exports.getReset = (req, res, next) => {
   res.render('auth/reset', {
     path: '/reset',
@@ -150,6 +166,9 @@ exports.getReset = (req, res, next) => {
   });
 };
 
+// @desc    Reset a user's password
+// @route   POST /reset
+// @access  Public
 exports.postReset = (req, res, next) => {
   crypto.randomBytes(32, (err, buffer) => {
     if (err) {
@@ -181,6 +200,9 @@ exports.postReset = (req, res, next) => {
   });
 };
 
+// @desc    Get a page for entering a new password
+// @route   GET /reset/:token
+// @access  Public
 exports.getNewPassword = (req, res, next) => {
   const token = req.params.token;
   User.findOne({
@@ -201,6 +223,9 @@ exports.getNewPassword = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
+// @desc    Submit a new user password
+// @route   POST /new-password
+// @access  Public
 exports.postNewPassword = (req, res, next) => {
   const { password: newPassword, userId, passwordToken } = req.body;
   let resetUser;
