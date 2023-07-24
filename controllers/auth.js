@@ -19,11 +19,16 @@ exports.getSignup = (req, res, next) => {
     path: '/signup',
     docTitle: 'Signup',
     errorMessage: req.flash('error'),
+    oldInput: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
   });
 };
 
 exports.postSignup = (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, confirmPassword } = req.body;
 
   const errors = validationResult(req);
 
@@ -32,6 +37,7 @@ exports.postSignup = (req, res, next) => {
       path: '/signup',
       docTitle: 'Signup',
       errorMessage: errors.array()[0].msg,
+      oldInput: { email, password, confirmPassword },
     });
   }
   bcryptjs
@@ -65,11 +71,13 @@ exports.getLogin = (req, res, next) => {
     path: '/login',
     docTitle: 'Login',
     errorMessage: req.flash('error'),
+    oldInput: { email: '', password: '' },
   });
 };
 
 exports.postLogin = (req, res, next) => {
   // res.setHeader('Set-Cookie', 'loggedIn=true');
+  const { email, password } = req.body;
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -77,10 +85,10 @@ exports.postLogin = (req, res, next) => {
       path: '/login',
       docTitle: 'Login',
       errorMessage: errors.array()[0].msg,
+      oldInput: { email, password },
     });
   }
 
-  const { email, password } = req.body;
   User.findOne({ email })
     .then((user) => {
       bcryptjs
@@ -97,12 +105,22 @@ exports.postLogin = (req, res, next) => {
             });
           } else {
             req.flash('error', 'Invalid email or password');
-            res.redirect('/login');
+            res.render('auth/login', {
+              path: '/login',
+              docTitle: 'Login',
+              errorMessage: req.flash('error'),
+              oldInput: { email, password },
+            });
           }
         })
         .catch((err) => {
           console.log(err);
-          res.redirect('/login');
+          res.render('auth/login', {
+            path: '/login',
+            docTitle: 'Login',
+            errorMessage: req.flash('error'),
+            oldInput: { email, password },
+          });
         });
     })
     .catch((e) => console.log(e));
@@ -169,6 +187,7 @@ exports.getNewPassword = (req, res, next) => {
         errorMessage: req.flash('error'),
         userId: user._id.toString(),
         passwordToken: token,
+        oldInput: { password: '' },
       });
     })
     .catch((err) => console.log(err));
@@ -177,6 +196,19 @@ exports.getNewPassword = (req, res, next) => {
 exports.postNewPassword = (req, res, next) => {
   const { password: newPassword, userId, passwordToken } = req.body;
   let resetUser;
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render('auth/new-password', {
+      path: '/new-password',
+      docTitle: 'New Password',
+      errorMessage: errors.array()[0].msg,
+      userId,
+      passwordToken,
+      oldInput: { password: newPassword },
+    });
+  }
 
   User.findOne({
     resetToken: passwordToken,

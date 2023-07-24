@@ -30,8 +30,6 @@ router.post(
           }
         });
       }),
-    ,
-    body('password'),
   ],
   postLogin
 );
@@ -64,7 +62,7 @@ router.post(
       .matches(/\d/)
       .withMessage('Password must contain at least one number'),
     body('confirmPassword').custom((value, { req }) => {
-      if (value !== req.body.confirmPassword) {
+      if (value !== req.body.password) {
         throw new Error('Passwords do not match');
       }
       return true;
@@ -75,6 +73,18 @@ router.post(
 router.get('/reset', getReset);
 router.post('/reset', postReset);
 router.get('/reset/:token', getNewPassword);
-router.post('/new-password', postNewPassword);
+router.post(
+  '/new-password',
+  body('password')
+    .isLength({ min: 8 })
+    .withMessage('Password must be at least 8 characters long')
+    .matches(/[a-z]/)
+    .withMessage('Password must contain at least one lowercase letter')
+    .matches(/[A-Z]/)
+    .withMessage('Password must contain at least one uppercase letter')
+    .matches(/\d/)
+    .withMessage('Password must contain at least one number'),
+  postNewPassword
+);
 
 module.exports = router;
