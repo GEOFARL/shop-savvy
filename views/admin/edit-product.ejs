@@ -5,6 +5,7 @@
 
   <body>
     <%- include('../includes/navigation.ejs') %>
+    <%- include('../includes/spinner.ejs') %>
 
     <main>
       <% if (errorMessage.length > 0) { %>
@@ -74,4 +75,5 @@
         <button class="btn" type="submit"><% if (editing) { %>Update Product<% } else { %>Add Product<% } %></button>
       </form>
     </main>
+    <script src="/js/handleFormSubmit.js"></script>
 <%- include('../includes/end.ejs') %>
