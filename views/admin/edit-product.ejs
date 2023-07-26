@@ -30,7 +30,7 @@
             type="text"
             name="imageUrl"
             id="imageUrl"
-            value="<% if (editing) { %><%= product.imageUrl %><% } else { %><%= oldInputs.imageUrl %><% } %>"
+            value="<% if (editing) { %>/<%= product.imageUrl %><% } else { %><%= oldInputs.imageUrl %><% } %>"
             class="<%= validationErrors.find(e => e.path === 'imageUrl') ? 'invalid' : '' %>"
           />
         </div> -->
