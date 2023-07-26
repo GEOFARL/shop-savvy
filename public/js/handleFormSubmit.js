@@ -19,7 +19,7 @@ productForm.addEventListener('submit', async (e) => {
   const spinner = new Spinner('.spinner');
   const formData = new FormData(productForm);
 
-  const validTypes = ['image/jpg', 'image/jpeg', 'image/png'];
+  const validTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp'];
 
   if (
     !validTypes.includes(formData.get('image').type) &&
