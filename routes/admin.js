@@ -11,7 +11,7 @@ const {
   getProducts,
   getEditProduct,
   postEditProduct,
-  postDeleteProduct,
+  deleteProduct,
 } = require('../controllers/admin');
 
 const router = express.Router();
@@ -61,6 +61,6 @@ router.post(
   postEditProduct
 );
 
-router.post('/delete-product', isAuth, postDeleteProduct);
+router.delete('/product/:productId', isAuth, deleteProduct);
 
 module.exports = router;
