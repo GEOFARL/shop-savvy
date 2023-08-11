@@ -106,5 +106,6 @@ mongoose
   .connect(uri)
   .then(() => {
     app.listen(3000);
+    console.log('App is started on the port', 3000);
   })
   .catch((err) => console.log(err));
