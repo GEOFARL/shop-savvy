@@ -6,6 +6,8 @@ const Order = require('../models/order');
 
 const PDFDocument = require('pdfkit');
 
+const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY);
+
 const ITEMS_PER_PAGE = 2;
 
 // @desc    Get products page
@@ -157,16 +159,44 @@ exports.postCartDeleteProduct = (req, res, next) => {
 // @route   GET /checkout
 // @access  Private
 exports.getCheckout = (req, res, next) => {
+  let total = 0;
+  let products;
   req.user
     .getCart()
-    .then((products) => {
+    .then((prods) => {
+      products = prods;
+      total = prods.reduce((prev, curr) => {
+        return prev + curr.quantity * curr.price;
+      }, 0);
+
+      return stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: products.map((p) => {
+          return {
+            price_data: {
+              currency: 'usd',
+              unit_amount: p.price * 100,
+              product_data: {
+                name: p.title,
+                description: p.description,
+              },
+            },
+            quantity: p.quantity,
+          };
+        }),
+        mode: 'payment',
+        success_url:
+          req.protocol + '://' + req.get('host') + '/checkout/success',
+        cancel_url: req.protocol + '://' + req.get('host') + '/checkout/cancel',
+      });
+    })
+    .then((session) => {
       res.render('shop/checkout', {
         path: 'checkout',
         docTitle: 'Checkout',
-        products: products,
-        totalSum: products.reduce((prev, curr) => {
-          return prev + curr.quantity * curr.price;
-        }, 0),
+        products,
+        totalSum: total,
+        sessionId: session.id,
       });
     })
     .catch((err) => {
@@ -177,9 +207,9 @@ exports.getCheckout = (req, res, next) => {
 };
 
 // @desc    Create a new order
-// @route   POST /create-order
-// @access  Private
-exports.postOrder = (req, res, next) => {
+// @route   GET /checkout/success
+// @access  Public
+exports.getCheckoutSuccess = (req, res, next) => {
   req.user
     .populate('cart.items.productId')
     .then((user) => {
