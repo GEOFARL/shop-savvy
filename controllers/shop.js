@@ -153,6 +153,29 @@ exports.postCartDeleteProduct = (req, res, next) => {
     });
 };
 
+// @desc    Get a checkout page
+// @route   GET /checkout
+// @access  Private
+exports.getCheckout = (req, res, next) => {
+  req.user
+    .getCart()
+    .then((products) => {
+      res.render('shop/checkout', {
+        path: 'checkout',
+        docTitle: 'Checkout',
+        products: products,
+        totalSum: products.reduce((prev, curr) => {
+          return prev + curr.quantity * curr.price;
+        }, 0),
+      });
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
+};
+
 // @desc    Create a new order
 // @route   POST /create-order
 // @access  Private
