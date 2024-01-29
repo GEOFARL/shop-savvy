@@ -1,4 +1,4 @@
-# Basic shop
+# ShopSavvy: Your Ultimate Retail Destination
 
 This is a _Node-Express_ application that should look like a **shop** 🛍️.
 
